@@ -12,12 +12,22 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { Add, Delete, Inventory, Person } from '@mui/icons-material';
 import { Outlet, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const drawerWidth = 240;
 
 export default function Root() {
 
   const navigate = useNavigate()
+
+  //Reviso si el usuario esta logueado
+  useEffect(() => {
+    // Verificar si el token ya está en localStorage
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/'); // Redirigir a la vista de login
+    }
+  }, [navigate]);
 
   return (
     <Box sx={{ display: 'flex' }}>
