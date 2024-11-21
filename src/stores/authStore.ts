@@ -24,6 +24,7 @@ export const useAuthStore = create<AuthStore>()(
     },
     logout: async () => {
       localStorage.removeItem('token')
+      localStorage.removeItem('defaultAlertShown')
       
       // Resetea todos los stores
       const productStore = useProductStore.getState();

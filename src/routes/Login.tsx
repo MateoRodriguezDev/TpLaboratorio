@@ -31,6 +31,19 @@ export default function Login() {
     }
   };
 
+  const defaultAlert = () => {
+    alert('Recuerde inicializar el repositorio de backend: https://github.com/MateoRodriguezDev/TpFinalBackend.git');
+    alert('Usuario por defecto: super@super.com - contraseña: superadmin');
+  };
+
+  useEffect(() => {
+    const hasShownAlert = localStorage.getItem('defaultAlertShown');
+    if (!hasShownAlert) {
+      defaultAlert();
+      localStorage.setItem('defaultAlertShown', 'true');
+    }
+  }, []);
+
   return (
     <>
       <ToastContainer
