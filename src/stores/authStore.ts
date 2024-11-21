@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { fetchLogin } from '../services/auth/AuthController';
 import { Credentials } from '../models/AuthModel';
+import { API } from '../services';
 
 type AuthStore = {
   login: (credentials: Credentials) => Promise<void>
@@ -12,7 +12,7 @@ export const useAuthStore = create<AuthStore>()(
 
     //Guardo el token en el localStorage
     login: async (credentials: Credentials) => {
-      const response = await fetchLogin(credentials)
+      const response = await API.login(credentials)
 
       if(response){
           const token = response.token

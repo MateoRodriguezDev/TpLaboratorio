@@ -4,4 +4,7 @@ export interface Product {
     price: number
     description: string
     quantity: number
-}
+    createdAt?: string
+    updatedAt?: string
+    deletedAt?: string | null
+  }

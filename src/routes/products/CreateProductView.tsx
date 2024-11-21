@@ -1,23 +1,48 @@
 import { useForm, Controller } from 'react-hook-form';
 import { TextField, Button, Box } from '@mui/material';
 import { Product } from '../../models/ProductModel';
+import { useProductStore } from '../../stores/productsStore';
+import { useNavigate } from 'react-router-dom';
 
 export default function CreateProductView() {
+  const productState = useProductStore.getState()
+  const navigate = useNavigate()
+
+  const createProduct = productState.createProduct
+  const editProduct = productState.editProduct
+
+  //Variables que necesito para saber si estoy actualizando un producto
+  const isEditing = productState.isEditing
+  const editingProduct = productState.editingProduct
+
+  
+  
+  //Valores iniciales del formulario
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
-    defaultValues: {
+    defaultValues: isEditing ?  editingProduct : {
       name: '',
       description: '',
       quantity: 0,
       price: 0,
-    },
+  },
   });
 
   const onSubmit = (data: Product) => {
-    console.log('Product created:', data);
+    if(isEditing){
+      console.log(data)
+      editProduct(editingProduct.id! ,{name: data.name, description: data.description, quantity: Number(data.quantity), price: Number(data.price)})
+    }else{
+      createProduct({...data, quantity: Number(data.quantity), price: Number(data.price)})
+    }
+    //Actualizo los productos
+    productState.getAllProducts()
+    navigate('/home')
+    reset()
   };
 
   return (
@@ -105,7 +130,7 @@ export default function CreateProductView() {
         )}
       />
       <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
-        Create Product
+        {isEditing ? 'Edit Product' : 'Create Product'}
       </Button>
     </Box>
   );

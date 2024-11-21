@@ -13,12 +13,16 @@ import ListItemText from '@mui/material/ListItemText';
 import { Add, Delete, Inventory, Person } from '@mui/icons-material';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import { ToastContainer } from 'react-toastify';
+import { useProductStore } from '../stores/productsStore';
 
 const drawerWidth = 240;
 
 export default function Root() {
 
   const navigate = useNavigate()
+  const getAllProducts = useProductStore(state => state.getAllProducts)
+  getAllProducts()
 
   //Reviso si el usuario esta logueado
   useEffect(() => {
@@ -29,8 +33,22 @@ export default function Root() {
     }
   }, [navigate]);
 
+
   return (
+
     <Box sx={{ display: 'flex' }}>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <CssBaseline />
       <AppBar
         position="fixed"
@@ -73,12 +91,7 @@ export default function Root() {
             <ListItemText primary={'Create Product'} />
           </ListItemButton>
 
-          <ListItemButton onClick={() => navigate('/deletedProducts')}>
-            <ListItemIcon>
-              <Delete />
-            </ListItemIcon>
-            <ListItemText primary={'Deleted Products'} />
-          </ListItemButton>
+
         </List>
         <Divider />
         <List>
@@ -98,12 +111,6 @@ export default function Root() {
             <ListItemText primary={'Create User'} />
           </ListItemButton>
 
-          <ListItemButton onClick={() => navigate('/deletedUsers')}>
-            <ListItemIcon>
-              <Delete />
-            </ListItemIcon>
-            <ListItemText primary={'Deleted Users'} />
-          </ListItemButton>
         </List>
       </Drawer>
       <Box

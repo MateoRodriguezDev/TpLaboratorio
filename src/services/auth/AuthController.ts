@@ -1,14 +1,13 @@
 import { isAxiosError } from "axios";
-import { APIResponse } from "../../models/ApiResponseModel";
 import { Credentials } from "../../models/AuthModel";
 import { AuthResponseModel } from "../../models/AuthResponseModel";
 import { api } from "../api";
 import { toast } from "react-toastify";
 
 // funcion para logearnos
-export async function fetchLogin(credentials: Credentials) {
+export async function login(credentials: Credentials) {
   try {
-    const { data } = await api.post<APIResponse<AuthResponseModel>>(
+    const { data } = await api.post<AuthResponseModel>(
       "/auth/login",
       credentials
     );
