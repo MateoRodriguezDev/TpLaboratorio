@@ -4,7 +4,7 @@ import { useProductStore } from "../../stores/productsStore";
 
 
 export default function ProductsView() {
-
+  
 
   const products = useProductStore(state => state.allProducts)
   return (

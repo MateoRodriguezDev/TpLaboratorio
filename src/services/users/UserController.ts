@@ -1,17 +1,17 @@
 import { isAxiosError } from "axios";
 import { api } from "../api";
 import { toast } from "react-toastify";
-import { Product } from "../../models/ProductModel";
+import { User } from "../../models/UserModel";
 
-// funcion para crear productos
-export async function createProduct(product: Product) {
+// funcion para crear usuario
+export async function createUser(user: User) {
   try {
-    const { data } = await api.post<Product>(
-      "products",
-      product
+    const { data } = await api.post<User>(
+      "users",
+      user
     );
 
-    toast.success('Product Created Successfully')
+    toast.success('User Created Successfully')
     return data;
   } catch (error) {
     if(isAxiosError(error) && error.response){
@@ -20,10 +20,10 @@ export async function createProduct(product: Product) {
   }
 }
 
-// funcion para recibir todos los productos
-export async function getAllProducts() {
+// funcion para recibir todos los usuarios
+export async function getAllUsers() {
   try {
-    const { data } = await api.get<Product[]>("products");
+    const { data } = await api.get<User[]>("users");
     return data;
   } catch (error) {
     if(isAxiosError(error) && error.response){
@@ -32,11 +32,11 @@ export async function getAllProducts() {
   }
 }
 
-// funcion para editar un producto
-export async function editProduct(id: number, updatedProduct: Product) {
+// funcion para editar un user
+export async function editUser(id: number, updatedUser: User) {
   try {
-    const { data } = await api.patch<Product>(`products/${id}`, updatedProduct);
-    toast.info(`Product Updated Successfully`)
+    const { data } = await api.patch<User>(`users/${id}`, updatedUser);
+    toast.info(`User Updated Successfully`)
     return data;
   } catch (error) {
     if(isAxiosError(error) && error.response){
@@ -45,11 +45,24 @@ export async function editProduct(id: number, updatedProduct: Product) {
   }
 }
 
-// funcion para borrar un producto
-export async function deleteProduct(id: number) {
+// funcion para cambiar rol a un user
+export async function changeRole(id: number) {
   try {
-    const { data } = await api.delete<string>(`products/${id}`);
-    toast.dark(`Product Deleted Successfully`)
+    const { data } = await api.patch<User>(`users/role/${id}`);
+    toast.info(`User Role Updated Successfully`)
+    return data;
+  } catch (error) {
+    if(isAxiosError(error) && error.response){
+        toast.error(error.response.data.message)
+    }
+  }
+}
+
+// funcion para borrar un user
+export async function deleteUser(id: number) {
+  try {
+    const { data } = await api.delete<string>(`users/${id}`);
+    toast.dark(`User Deleted Successfully`)
     return data;
   } catch (error) {
     if(isAxiosError(error) && error.response){

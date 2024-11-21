@@ -1,18 +1,45 @@
 import { useForm, Controller } from 'react-hook-form';
-import { TextField, Button, Box } from '@mui/material';
+import { TextField, Button, Box, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
 import { User } from '../../models/UserModel';
+import { useUserStore } from '../../stores/userStore';
+import { useNavigate } from 'react-router-dom';
 
 export default function CreateUserView() {
+  const userState = useUserStore.getState()
+  const navigate = useNavigate()
+
+  const createUser = userState.createUser
+  const editUser = userState.editUser
+
+  //Variables que necesito para saber si estoy actualizando un producto
+  const isEditing = userState.isEditing
+  const editingUser = userState.editingUser
+
+
+
   const {
     control,
+    reset,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    defaultValues: { email: '', password: '' },
+    defaultValues: isEditing ?  editingUser : {
+      email: '',
+      password: '',
+      role: ''
+  },
   });
 
   const onSubmit = (data: User) => {
-    console.log('Form submitted:', data);
+    if(isEditing){
+      editUser(editingUser.id! ,{email: data.email, password: data.password, role: data.role})
+    }else{
+      createUser(data)
+    }
+    //Actualizo los productos
+    userState.getAllUsers()
+    navigate('/users')
+    reset()
   };
 
   return (
@@ -60,6 +87,28 @@ export default function CreateUserView() {
           />
         )}
       />
+      <Controller
+        name="role"
+        control={control}
+        rules={{
+          required: 'Role is required',
+        }}
+        render={({ field }) => (
+          <FormControl fullWidth margin="normal" error={!!errors.role}>
+            <InputLabel>Role</InputLabel>
+            <Select {...field} label="Role">
+              <MenuItem value="admin">Admin</MenuItem>
+              <MenuItem value="user">User</MenuItem>
+            </Select>
+          </FormControl>
+        )}
+        
+      />
+      {errors.role && (
+        <Box color="error.main" fontSize="0.875rem" mb={3} ml={1}>
+          {errors.role.message}
+        </Box>
+      )}
       <Button type="submit" variant="contained" fullWidth>
         Submit
       </Button>

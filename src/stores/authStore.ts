@@ -2,9 +2,12 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { Credentials } from '../models/AuthModel';
 import { API } from '../services';
+import { useProductStore } from './productsStore';
+import { useUserStore } from './userStore';
 
 type AuthStore = {
   login: (credentials: Credentials) => Promise<void>
+  logout: () => Promise<void>
 };
 
 export const useAuthStore = create<AuthStore>()(
@@ -19,6 +22,15 @@ export const useAuthStore = create<AuthStore>()(
           localStorage.setItem('token', token)
       }
     },
+    logout: async () => {
+      localStorage.removeItem('token')
+      
+      // Resetea todos los stores
+      const productStore = useProductStore.getState();
+      const userStore = useUserStore.getState();
+      productStore.reset();
+      userStore.reset();
+    }
 
    
   }))

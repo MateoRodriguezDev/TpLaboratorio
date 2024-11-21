@@ -34,15 +34,14 @@ export default function CreateProductView() {
 
   const onSubmit = (data: Product) => {
     if(isEditing){
-      console.log(data)
       editProduct(editingProduct.id! ,{name: data.name, description: data.description, quantity: Number(data.quantity), price: Number(data.price)})
     }else{
       createProduct({...data, quantity: Number(data.quantity), price: Number(data.price)})
     }
     //Actualizo los productos
     productState.getAllProducts()
-    navigate('/home')
     reset()
+    navigate('/home')
   };
 
   return (

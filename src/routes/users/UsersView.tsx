@@ -1,20 +1,36 @@
+import { Box, Typography } from "@mui/material";
 import UserCard from "../../components/UserCard";
+import { useUserStore } from "../../stores/userStore";
 
 export default function UsersView() {
 
-  const users = [
-    { email: 'user1@example.com', role: 'Admin' },
-    { email: 'user2@example.com', role: 'Editor' },
-    { email: 'user3@example.com', role: 'Viewer' },
-  ];
-
+  const users = useUserStore(state => state.allUsers)
+  if (users.length === 0) {
+    return (
+      <Box 
+        sx={{ 
+          display: 'flex', 
+          flexDirection: 'column', 
+          alignItems: 'center', 
+          justifyContent: 'center', 
+          height: '50vh' 
+        }}
+      >
+        <Typography variant="h6" color="textSecondary">
+          No users found or you don't have access to this view.
+        </Typography>
+      </Box>
+    );
+  }
   return (
     <>
-      {users.map((user, index) => (
+    
+      {users.map((user) => (
         <UserCard
-          key={index}
+          key={user.id}
+          id={user.id!}
           email={user.email}
-          role={user.role}
+          role={user.role!}
         />
       ))}
     </>

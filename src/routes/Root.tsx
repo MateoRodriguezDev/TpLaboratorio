@@ -10,19 +10,28 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { Add, Delete, Inventory, Person } from '@mui/icons-material';
+import { Add, Inventory, Logout, Person } from '@mui/icons-material';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { useProductStore } from '../stores/productsStore';
+import { useUserStore } from '../stores/userStore';
+import { useAuthStore } from '../stores/authStore';
 
 const drawerWidth = 240;
 
 export default function Root() {
+  const authState = useAuthStore.getState()
+  const userState = useUserStore.getState()
 
   const navigate = useNavigate()
   const getAllProducts = useProductStore(state => state.getAllProducts)
   getAllProducts()
+
+  const getAllUsers = userState.getAllUsers
+  getAllUsers()
+
+
 
   //Reviso si el usuario esta logueado
   useEffect(() => {
@@ -32,6 +41,12 @@ export default function Root() {
       navigate('/'); // Redirigir a la vista de login
     }
   }, [navigate]);
+
+  const logout = () => {
+    authState.logout()
+    userState.allUsers = []
+    navigate('/')
+  }
 
 
   return (
@@ -110,6 +125,18 @@ export default function Root() {
             </ListItemIcon>
             <ListItemText primary={'Create User'} />
           </ListItemButton>
+
+        </List>
+        <List>
+        <Divider />
+          <ListItem disablePadding>
+            <ListItemButton onClick={logout}>
+              <ListItemIcon >
+                <Logout color='error'/>
+              </ListItemIcon>
+              <ListItemText primary={'Logout'} sx={{ color: 'red' }} />
+            </ListItemButton>
+          </ListItem>
 
         </List>
       </Drawer>

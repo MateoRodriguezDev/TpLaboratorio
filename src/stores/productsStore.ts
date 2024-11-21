@@ -11,6 +11,7 @@ type ProductStore = {
   getAllProducts: () => Promise<void>;
   editProduct: (id: number, product: Product) => Promise<void>;
   deleteProduct: (id: number) => Promise<void>;
+  reset: () => void
 };
 
 export const useProductStore = create<ProductStore>((set, get) => ({
@@ -79,4 +80,5 @@ export const useProductStore = create<ProductStore>((set, get) => ({
       console.error("Error creating product:", error);
     }
   },
+  reset: () => set({ allProducts: [], isEditing: false, editingProduct: {} as Product }), // Reinicia el estado a su valor inicial
 }));
