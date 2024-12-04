@@ -55,10 +55,9 @@ export const useProductStore = create<ProductStore>((set, get) => ({
       const response = await API.editProduct(id, updatedProduct);
 
       // Reinicio las variables de edición
-      if (response) {
         get().isEditing = false
         get().editingProduct = {} as Product
-      }
+
     } catch (error) {
       console.error("Error creating product:", error);
     }
